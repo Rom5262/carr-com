@@ -1,19 +1,46 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Cargar el archivo CSV
+# Cargar los datos
 orders = pd.read_csv('instacart_orders.csv', sep=';')
 
-# Variable numérica fija
-variable_numerica = 'order_hour_of_day'
+# Agrupar por hora y contar usuarios
+usuarios_por_hora = orders.groupby('order_hour_of_day')['user_id'].count()
 
+# Crear gráfico
+fig, ax = plt.subplots(figsize=(8, 4))
+usuarios_por_hora.plot(
+    ax=ax,
+    marker='o',
+    linestyle='-',
+    color='b',
+    grid=True
+)
 
-# Crear el histograma con curva de densidad
-fig, ax = plt.subplots()
-sns.histplot(data=orders, x=variable_numerica, kde=True, ax=ax)
-ax.set_title(f'Histograma de {variable_numerica}')
+# Personalización
+ax.set_title('Usuarios que hacen órdenes por hora del día')
 ax.set_xlabel('Hora del Día')
-ax.set_ylabel('Código Usuario')
+ax.set_ylabel('Cantidad de Usuarios')
+
+# Mostrar en Streamlit
 st.pyplot(fig)
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar los datos
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+
+# Crear histograma con KDE
+fig, ax = plt.subplots()
+sns.histplot(data=orders, x='order_hour_of_day', kde=True, bins=24, ax=ax)
+
+# Personalización
+ax.set_title('Distribución de órdenes por hora del día')
+ax.set_xlabel('Hora del Día')
+ax.set_ylabel('Cantidad de Órdenes (Frecuencia)')
+st.pyplot(fig)
+
