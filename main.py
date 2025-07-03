@@ -31,16 +31,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Cargar los datos
+# Cargar datos
 orders = pd.read_csv('instacart_orders.csv', sep=';')
 
-# Crear histograma con KDE
+# Crear gráfico
 fig, ax = plt.subplots()
-sns.histplot(data=orders, x='order_hour_of_day', kde=True, bins=24, ax=ax)
+
+# Histograma sin KDE
+sns.histplot(
+    data=orders,
+    x='order_hour_of_day',
+    bins=24,
+    ax=ax,
+    color='orange'
+)
+
 
 # Personalización
 ax.set_title('Distribución de órdenes por hora del día')
 ax.set_xlabel('Hora del Día')
-ax.set_ylabel('Cantidad de Órdenes (Frecuencia)')
+ax.set_ylabel('Frecuencia')
 st.pyplot(fig)
-
