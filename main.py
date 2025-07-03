@@ -112,3 +112,66 @@ ax.set_xticklabels(calendar.day_name[:7])  # Etiquetas con nombres de los días
 
 # Mostrar gráfico en Streamlit
 st.pyplot(fig)
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+
+
+Tiempo_espera = orders['days_since_prior_order'].value_counts().sort_index()
+
+# Crear gráfico
+fig, ax = plt.subplots(figsize=(8, 4))
+Tiempo_espera.plot(
+    ax=ax,
+    marker='o',
+    linestyle='-',
+    color='b',
+    grid=True
+)
+
+# Personalización
+ax.set_title('Tiempo de Solicitud')
+ax.set_xlabel('Día del Mes')
+ax.set_ylabel('Codigo Usuario')
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+
+# Filtrar datos por miércoles (3) y sábado (6)
+dif_wed = orders[orders['order_dow'] == 3]
+dif_sat = orders[orders['order_dow'] == 6]
+
+# Conteo por hora
+graphic_wed = dif_wed['order_hour_of_day'].value_counts().sort_index()
+graphic_sat = dif_sat['order_hour_of_day'].value_counts().sort_index()
+
+# Unir los conteos en un solo DataFrame
+graphic_dif_w_s = pd.concat([graphic_wed, graphic_sat], axis=1)
+graphic_dif_w_s.columns = ['wednesday', 'saturday']
+
+# Crear gráfico de barras
+fig, ax = plt.subplots(figsize=(10, 5))
+graphic_dif_w_s.plot(kind='bar', ax=ax, color=['skyblue', 'orange'])
+
+# Personalización
+ax.set_title('Diferencia de Pedidos por Hora del Día')
+ax.set_xlabel('Hora del Día')
+ax.set_ylabel('Cantidad de Órdenes')
+ax.legend(title='Día')
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
