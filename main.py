@@ -175,3 +175,98 @@ ax.legend(title='Día')
 # Mostrar en Streamlit
 st.pyplot(fig)
 
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+order_client = orders['user_id'].value_counts()
+
+# Crear gráfico
+fig, ax = plt.subplots()
+
+# Histograma en color rosa
+sns.histplot(
+    order_client,
+    bins=24,
+    ax=ax,
+    color='#FF69B4'  # Rosa fuerte tipo HotPink
+)
+
+# Personalización
+ax.set_title('Distribución de Número de Ordenes por Cliente')
+ax.set_xlabel('Cantidad de Ordenes')
+ax.set_ylabel('Número de Clientes')
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+order_products = pd.read_csv('order_products.csv', sep=';')
+products = pd.read_csv('products.csv', sep=';')
+
+
+# Agrupar productos por cantidad de compras
+count_products = order_products.groupby('product_id').size().reset_index(name='more_purchased')
+popular_products = count_products.merge(products, on='product_id', how='left')
+top_20_products = popular_products.sort_values(by='more_purchased', ascending=False).head(20)
+
+# Crear gráfico
+fig, ax = plt.subplots()
+
+# Gráfico de barras horizontal en verde
+sns.barplot(
+    y=top_20_products['product_name'],
+    x=top_20_products['more_purchased'],
+    ax=ax,
+    palette=['#32CD32'] * len(top_20_products)  # Verde tipo LimeGreen para cada barra
+)
+
+# Personalización
+ax.set_title('Los 20 Productos Más Populares')
+ax.set_xlabel('Cantidad de Compras')
+ax.set_ylabel('Nombre del Producto')
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+order_products = pd.read_csv('order_products.csv', sep=';')
+
+# Agrupar para contar artículos por pedido
+articles = order_products.groupby('order_id').size()
+
+# Crear gráfico
+fig, ax = plt.subplots()
+
+# Histograma en azul celeste
+sns.histplot(
+    articles,
+    bins=30,
+    ax=ax,
+    color='#00BFFF'  # DeepSkyBlue
+)
+
+# Personalización
+ax.set_title('Distribución de Artículos por Pedido')
+ax.set_xlabel('Cantidad de Artículos')
+ax.set_ylabel('Frecuencia')
+
+# Mostrar en Streamlit
+st.pyplot(fig)
