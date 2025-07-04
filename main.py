@@ -246,27 +246,84 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Configuración visual
+sns.set_style("whitegrid")
+
 # Cargar datos
 order_products = pd.read_csv('order_products.csv', sep=';')
+products = pd.read_csv('products.csv', sep=';')
 
-# Agrupar para contar artículos por pedido
-articles = order_products.groupby('order_id').size()
+# Agrupar y preparar top N productos
+most_reordered = order_products.groupby('product_id')['reordered'].sum().reset_index()
+most_reordered = most_reordered.sort_values(by='reordered', ascending=False)
+most_reordered = most_reordered.merge(products[['product_id', 'product_name']], on='product_id', how='left')
 
-# Crear gráfico
-fig, ax = plt.subplots()
+# 🎚️ Interactividad
+top_n = st.slider("Cantidad de productos a mostrar", min_value=5, max_value=50, value=20, step=5)
+tipo = st.radio("Tipo de gráfico", ["Horizontal", "Vertical"])
 
-# Histograma en azul celeste
-sns.histplot(
-    articles,
-    bins=30,
-    ax=ax,
-    color='#00BFFF'  # DeepSkyBlue
-)
+# Subset de datos
+top_products = most_reordered.head(top_n)
+
+# 🎨 Crear degradado de color
+palette = sns.color_palette('Blues_r', len(top_products))
+
+# 📊 Crear gráfico
+fig, ax = plt.subplots(figsize=(10, 6))
+
+if tipo == "Horizontal":
+    sns.barplot(data=top_products, x='reordered', y='product_name', ax=ax, palette=palette)
+    for bar in ax.patches:
+        ax.text(bar.get_width() + 0.3, bar.get_y() + bar.get_height()/2,
+                str(int(bar.get_width())), va='center', fontsize=9)
+    ax.set_xlabel("Cantidad de Reordenes")
+    ax.set_ylabel("Nombre del Producto")
+else:
+    sns.barplot(data=top_products, x='product_name', y='reordered', ax=ax, palette=palette)
+    for bar in ax.patches:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3,
+                str(int(bar.get_height())), ha='center', fontsize=9)
+    ax.set_ylabel("Cantidad de Reordenes")
+    ax.set_xlabel("Nombre del Producto")
+    plt.xticks(rotation=45)
+
+# 🏷️ Título
+ax.set_title(f"Top {top_n} Productos Reordenados")
+
+# 🖼️ Mostrar en Streamlit
+st.pyplot(fig)
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+order_products = pd.read_csv('order_products.csv', sep=';')
+products = pd.read_csv('products.csv', sep=';')
+departments = pd.read_csv('departments.csv', sep=';')
+
+# Calcular reorder ratio por producto
+reorder_ratio = order_products.groupby('product_id')['reordered'].mean().reset_index()
+reorder_ratio.columns = ['product_id', 'reorder_ratio']
+
+# Unir con productos y departamentos
+merged = reorder_ratio.merge(products[['product_id', 'department_id']], on='product_id', how='left')
+merged = merged.merge(departments, on='department_id', how='left')  # Junta con los nombres reales
+
+# Crear gráfico violinplot
+fig, ax = plt.subplots(figsize=(14, 6))
+sns.violinplot(data=merged, x='department', y='reorder_ratio', palette='coolwarm', ax=ax)
 
 # Personalización
-ax.set_title('Distribución de Artículos por Pedido')
-ax.set_xlabel('Cantidad de Artículos')
-ax.set_ylabel('Frecuencia')
+ax.set_title('Reordenado de Productos por Departamento')
+ax.set_xlabel('Departamento')
+ax.set_ylabel('Reordenes')
+plt.xticks(rotation=45)
+fig.tight_layout()
 
 # Mostrar en Streamlit
 st.pyplot(fig)
+
+
