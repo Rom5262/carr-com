@@ -15,7 +15,7 @@ Desarrollado con **Streamlit**, este panel permite explorar el comportamiento de
 - Horarios y días de mayor actividad 📊
 - Frecuencia de reordenación 🔄
 
-👉 Ver aplicación desplegada en Render: 
+👉 Ver aplicación desplegada en Render:(https://carr-com.onrender.com)
 
 Ideal para analistas, equipos de marketing o quienes buscan comprender los patrones de consumo en servicios de entrega.
 
