@@ -302,6 +302,43 @@ import seaborn as sns
 # Cargar datos
 order_products = pd.read_csv('order_products.csv', sep=';')
 products = pd.read_csv('products.csv', sep=';')
+
+# Calcular reorder ratio por producto
+reorder_ratio = order_products.groupby('product_id')['reordered'].mean().reset_index()
+reorder_ratio.columns = ['product_id', 'reorder_ratio']
+
+# Unir con productos
+merged = reorder_ratio.merge(products[['product_id', 'product_name']], on='product_id', how='left')
+
+# Seleccionar los top N productos
+top_n = st.slider("Ver top productos más reordenados", min_value=5, max_value=50, value=20)
+top_products = merged.sort_values(by='reorder_ratio', ascending=False).head(top_n)
+
+# Crear gráfico violinplot por producto
+fig, ax = plt.subplots(figsize=(14, 6))
+sns.violinplot(data=top_products, x='product_name', y='reorder_ratio', palette='coolwarm', ax=ax)
+
+
+# Personalización
+ax.set_title('Producto Reordenado')
+ax.set_xlabel('Producto')
+ax.set_ylabel('Reorden')
+plt.xticks(rotation=45)
+fig.tight_layout()
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
+
+
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+order_products = pd.read_csv('order_products.csv', sep=';')
+products = pd.read_csv('products.csv', sep=';')
 departments = pd.read_csv('departments.csv', sep=';')
 
 # Calcular reorder ratio por producto
