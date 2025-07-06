@@ -2,9 +2,9 @@
 import streamlit as st
 import pandas as pd
 
-# 👇 Importa funciones desde tus módulos
-from modulos.limpieza import limpieza_general
-from modulos.graficos import (
+# 👇 Importa funciones desde utilidad
+from utilidad.limpieza import limpieza_general
+from utilidad.graficos import (
     grafico_ordenes_por_hora,
     grafico_histograma_por_hora,
     grafico_ordenes_por_dia,
@@ -69,4 +69,3 @@ with st.expander("📊 Productos más reordenados"):
 with st.expander("📊 Reorden por departamento"):
     fig = grafico_reorden_por_departamento(order_products, products, departments)
     st.pyplot(fig)
-    
