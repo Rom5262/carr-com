@@ -18,10 +18,11 @@ from utilidad.graficos import (
 )
 
 # 📂 Carga de datos
-orders = pd.read_csv('data/instacart_orders.csv', sep=';')
-order_products = pd.read_csv('data/order_products.csv', sep=';')
-products = pd.read_csv('data/products.csv', sep=';')
-departments = pd.read_csv('data/departments.csv', sep=';')
+orders = pd.read_csv('instacart_orders.csv', sep=';')
+order_products = pd.read_csv('order_products.csv', sep=';')
+products = pd.read_csv('products.csv', sep=';')
+departments = pd.read_csv('departments.csv', sep=';')
+aisles = pd.read_csv('aisles.csv', sep=';')
 
 # 🧼 Limpieza básica
 orders = limpieza_general(orders)
