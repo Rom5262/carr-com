@@ -16,17 +16,15 @@ def limpieza_general(df):
     """
     df = df.copy()
 
-    Limpieza de  columnas 
+   
     df.columns = (
         df.columns.str.strip()
-                  .str.lower()
-                  .str.replace(" ", "_")
-                  .str.replace(r"[^\w]", "_", regex=True))
+                    .str.lower()
+                    .str.replace(" ", "_")
+                    .str.replace(r"[^\w]", "_", regex=True))
 
-    
     df.drop_duplicates(inplace=True)
 
-    
     for col in df.select_dtypes(include='object'):
         df[col] = df[col].str.strip()
 
@@ -36,7 +34,7 @@ def limpieza_general(df):
             try:
                 df[col] = pd.to_datetime(df[col])
             except Exception:
-                pass  # si falla, no interfiere
+                pass  
 
     
     print("Tipos de columnas:")
@@ -45,4 +43,3 @@ def limpieza_general(df):
     print(df.isnull().sum())
 
     return df
-
