@@ -87,4 +87,6 @@ def display_chart_section(chart_func, *args, title_text):
                 st.warning(f"No se pudo generar el gráfico '{title_text}'. Esto podría deberse a datos faltantes o a un problema en la función del gráfico.")
         except Exception as e:
             st.error(f"Se produjo un error inesperado al generar el gráfico '{title_text}': {e}")
-            st.info("Por favor, revise los
+            st.info("""Por favor, revise los logs del servidor para más detalles.
+         Este mensaje puede aparecer si el gráfico no se generó correctamente.""")
+            
