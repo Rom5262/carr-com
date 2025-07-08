@@ -1,0 +1,18 @@
+# Archivos generados automáticamente por Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales (si llegas a usarlos)
+.venv/
+venv/
+.env
+
+# Notebooks (si trabajas con .ipynb en algún momento)
+*.ipynb_checkpoints/
+
+# Archivos del sistema que se cuelan
+.DS_Store
+Thumbs.db
+
+# Config opcional de Streamlit
+.streamlit/*.toml
