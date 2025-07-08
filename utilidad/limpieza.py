@@ -16,22 +16,21 @@ def limpieza_general(df):
     """
     df = df.copy()
 
-    # 👉 Nombres de columnas estandarizados
+    Limpieza de  columnas 
     df.columns = (
         df.columns.str.strip()
                   .str.lower()
                   .str.replace(" ", "_")
-                  .str.replace(r"[^\w]", "_", regex=True)
-    )
+                  .str.replace(r"[^\w]", "_", regex=True))
 
-    # 👉 Eliminar duplicados
+    
     df.drop_duplicates(inplace=True)
 
-    # 👉 Limpiar espacios en strings (solo columnas tipo object)
+    
     for col in df.select_dtypes(include='object'):
         df[col] = df[col].str.strip()
 
-    # 👉 Intentar convertir columnas a tipo fecha
+    
     for col in df.columns:
         if "date" in col or "fecha" in col:
             try:
@@ -39,10 +38,11 @@ def limpieza_general(df):
             except Exception:
                 pass  # si falla, no interfiere
 
-    # 👉 Reporte rápido (puedes comentar esto si no usas notebooks)
+    
     print("Tipos de columnas:")
     print(df.dtypes)
     print("\nNulos por columna:")
     print(df.isnull().sum())
 
     return df
+
